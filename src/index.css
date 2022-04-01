@@ -11,3 +11,39 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.btn {
+  background-color: #1A1F16;
+  padding: 8px 24px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: #fff;
+  border: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.btn p {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: #fff;  
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
