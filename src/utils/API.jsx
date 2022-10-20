@@ -1,10 +1,10 @@
 import axios from "axios";
 
 const defaultOptions = {
-    baseURL: "http://142.93.229.148",
-    headers: {
-        'Content-Type': 'application/json',
-    },
+  baseURL: "https://profitmodel-server.herokuapp.com/api",
+  headers: {
+    "Content-Type": "application/json",
+  },
 };
 
 let API = axios.create(defaultOptions);

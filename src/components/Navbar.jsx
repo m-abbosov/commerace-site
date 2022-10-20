@@ -9,20 +9,25 @@ import {ReactComponent as AdminIcon} from "../assets/icons/admin.svg"
 export default function Navbar() {
     return (
       <NavbarContainer>
-          <NavLink className="nav"id="home" to="/product">
-            <Dashboard />
-          </NavLink>
+        <NavLink className="nav" id="home" to="/product">
+          <Dashboard />
+        </NavLink>
 
-          <NavLink className="nav" to="/bags">
-            <Bag />
-          </NavLink>
+        <NavLink className="nav" to="/bags">
+          <Bag />
+        </NavLink>
 
-          <NavLink className="nav" to="/login">
+        {localStorage.getItem("token") ? (
+          <NavLink className="nav" to="/admin">
             <AdminIcon />
           </NavLink>
-
+        ) : (
+          <NavLink className="nav" to="/admin">
+            <AdminIcon />
+          </NavLink>
+        )}
       </NavbarContainer>
-  )
+    );
 }
 
 const NavbarContainer = styled.div`

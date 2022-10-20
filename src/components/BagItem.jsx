@@ -1,40 +1,66 @@
 import React, { useState } from 'react'
 import styled from "styled-components"
-import Stars from "../components/Stars"
+import Carousel from "react-bootstrap/Carousel";
+
 import MinusIcon from "../assets/icons/minus.svg"
 import PlusIcon from "../assets/icons/plus.svg"
 
 export default function BagItem({element}) {
-  const [quantity,  setQuantity] = useState(1)
+  const [quantity, setQuantity] = useState(1)
 
   return (
     <Wrapper>
-        <img className='bag__image' src={`http://142.93.229.148/`   + element.image} alt="" />
-        <div className="bag__info">
-            <b className='bag__info__title'>{element.title}</b>
-            <p className='bag__info__model'>{element.model}</p>
-            <p className="bag__info__description">{element.description}</p>
-            <div className="bag__info__stars">
-              <Stars stars={element.stars} />
-              <p>{element.stars} / 5</p>
-            </div>
+      {element.photos.length > 1 ? (
+        <Carousel className="bag__image">
+          {element.photos.map((item, index) => {
+            return (
+              <Carousel.Item interval={3000} key={index}>
+                <img
+                  className="d-block bag__image"
+                  src={`https://profitmodel-server.herokuapp.com/api/product/${element.id}/photo/${item.id}`}
+                  alt="First slide"
+                />
+              </Carousel.Item>
+            );
+          })}
+        </Carousel>
+      ) : (
+        <img
+          className="bag__image"
+          src={`https://profitmodel-server.herokuapp.com/api/product/${element.id}/photo/${element.photos[0].id}`}
+          alt={element.name}
+        />
+      )}
+      <div className="bag__info">
+        <b className="bag__info__title">{element.name}</b>
+        <p className="bag__info__model">{element.brand.name}</p>
+        <p className="bag__info__description">{element.description}</p>
 
-
-            <div className="bag__info__price-quantitiy">
-              <div className="bag__info__price">
-                <p>${element.price}</p>
-                <p>x</p>
-                <p>{quantity}</p>
-              </div>
-              <div className="bag__info__quantitiy">
-                <img onClick={() => setQuantity(quantity - 1)} style={{display: quantity <= 1 ? "none" : "inline-block"}} src={MinusIcon} alt="" />
-                <p>{quantity}</p>
-                <img onClick={() => setQuantity(quantity + 1)} src={PlusIcon} alt="" />
-              </div>
-            </div>
+        <div className="bag__info__price-quantitiy">
+          <div className="bag__info__price">
+            <p>${element.priceList[0].price}</p>
+            <p>x</p>
+            <p>{quantity}</p>
+            <p>{element.priceList[0].type}</p>
+          </div>
+          <div className="bag__info__quantitiy">
+            <img
+              onClick={() => setQuantity(quantity - 1)}
+              style={{ display: quantity <= 1 ? "none" : "inline-block" }}
+              src={MinusIcon}
+              alt=""
+            />
+            <p>{quantity}</p>
+            <img
+              onClick={() => setQuantity(quantity + 1)}
+              src={PlusIcon}
+              alt=""
+            />
+          </div>
         </div>
+      </div>
     </Wrapper>
-  )
+  );
 }
 
 const Wrapper  = styled.div`
@@ -72,21 +98,6 @@ const Wrapper  = styled.div`
       color: #1A1F16;
     }
 
-    .bag__info__stars {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 20px;
-
-      p {
-        font-weight: 400;
-        font-size: 16px;
-        letter-spacing: -0.02em;
-
-        color: #12805D;
-      }
-    }
-
     .bag__info__price-quantitiy {
       display: flex;
       align-items: center;
@@ -109,6 +120,9 @@ const Wrapper  = styled.div`
         display: flex;
         align-items: center;
         gap: 15px;
+        p {
+          margin: 0;
+        }
 
         img {
           cursor: pointer;

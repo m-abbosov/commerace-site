@@ -1,58 +1,85 @@
-import { useNavigate } from "react-router-dom"
-import styled from "styled-components"
-import API from "../utils/API"
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import Form from "react-bootstrap/Form";
+import API from "../utils/API";
+import { useState } from "react";
 
 export default function CreateProduct() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [priceType, setPriceType] = useState("SALE");
 
   const formClick = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     let formData = new FormData()
-    
-    formData.append("title", e.target[0].value)
-    formData.append("model", e.target[1].value)
-    formData.append("stars", e.target[2].value)
-    formData.append("type", e.target[3].value)
-    formData.append("price", e.target[4].value)
-    formData.append("description", e.target[5].value)
-    formData.append("image", e.target[6].files[0])
-    
-    API.post(`/product`,formData)
-      .then(res => {
-        navigate("/admin")
-      })
-  }
+
+    formData.append("name", e.target[0].value);
+    formData.append("description", e.target[1].value);
+    formData.append("discount", e.target[2].value);
+
+    formData.append("priceList", [
+      {
+        type: priceType,
+        price: e.target[4].value,
+      }
+    ]);
+
+    formData.append("categoryId", 1);
+    formData.append("brandId", 1);
+    formData.append("measurementId", 1);
+    formData.append("codeList", [e.target[5].value]);
+    formData.append("photos", [e.target[6].files[0]]);
+
+    API.post(`/product`, formData).then((res) => {
+      if (res) {
+        navigate("/admin");
+      }
+    });
+  };
 
   return (
     <Wrapper>
-      <form onSubmit={formClick}>
-        <label htmlFor="">Title</label>
-        <input type="text" />
+      <Form onSubmit={formClick}>
+        <label htmlFor="">Name</label>
+        <input type="text" placeholder="Name" />
+        <label htmlFor="">Description</label>
+        <textarea
+          name=""
+          id=""
+          cols="30"
+          rows="10"
+          placeholder="Description"
+        ></textarea>
 
-        <label htmlFor="">Model</label>
-        <input type="text" />
+        <label htmlFor="">Discount</label>
+        <input type="number" step={0.5} max={100} placeholder="Discount" />
 
-        <label htmlFor="">Stars</label>
-        <input 
-          type="number"
-          step={0.5}
-          max={5} />
-
-        <label htmlFor="">Type</label>
-        <input type="text" />
+        <label htmlFor="">Sale Price</label>
+        <Form.Select
+          aria-label="Default select example"
+          onChange={(e) => setPriceType(e.target.value)}
+        >
+          <option value="SALE">SALE</option>
+          <option value="WHOSALE">WHOSALE</option>
+          <option value="BANK">BANK</option>
+        </Form.Select>
 
         <label htmlFor="">Price</label>
-        <input type="text" />
+        <input type="number" placeholder="Price" />
 
-        <label htmlFor="">Description</label>
-        <textarea name="" id="" cols="30" rows="10"></textarea>
+        <label htmlFor="">Barcode</label>
+        <input type="number" placeholder="Barcode" />
         <label htmlFor="">Image</label>
-        <input className="custom-file-input" type="file" accept=".jpg , .jpeg , .jfif , .pjpeg , .pjp, .png, .svg" />
+        <input
+          className="custom-file-input"
+          type="file"
+          accept=".jpg , .jpeg , .jfif , .pjpeg , .pjp, .png, .svg"
+          style={{ cursor: "pointer" }}
+        />
 
         <button>CREATE</button>
-      </form>
+      </Form>
     </Wrapper>
-  )
+  );
 }
 
 const Wrapper = styled.div`
@@ -70,18 +97,24 @@ const Wrapper = styled.div`
     background-color: white;
     border-radius: 15px;
 
-    input, textarea {
+    input,
+    textarea,
+    select {
       width: 596px;
       margin-bottom: 15px;
       resize: none;
       outline: none;
       border: none;
-      background: #FFFFFF;
+      background: #ffffff;
       box-shadow: 0px 4px 16px rgba(26, 31, 22, 0.15);
       border-radius: 13px;
-      padding: 10px 24px;
-      font-size: 16px;
+      padding: 5px 15px;
+      font-size: 14px;
       color: #585858;
+
+      &::placeholder {
+        color: rgba(177, 177, 177, 0.486);
+      }
     }
 
     textarea {
@@ -94,20 +127,18 @@ const Wrapper = styled.div`
       line-height: 15px;
       letter-spacing: -0.02em;
       color: rgba(26, 31, 22, 0.5);
-      margin:0 0 5px 5px;
+      margin: 0 0 5px 5px;
     }
 
     button {
       padding: 8px;
       border: none;
-      background: #1A1F16;
+      background: #1a1f16;
       border-radius: 10px;
       color: white;
       letter-spacing: 1px;
       cursor: pointer;
     }
-
-    
 
     position: absolute;
     top: 50%;
@@ -119,7 +150,7 @@ const Wrapper = styled.div`
     visibility: hidden;
   }
   .custom-file-input::before {
-    content: 'Select Image';
+    content: "Select Image";
     display: inline-block;
     background: linear-gradient(top, #f9f9f9, #e3e3e3);
     border: 1px solid #999;
@@ -140,4 +171,4 @@ const Wrapper = styled.div`
   .custom-file-input:active::before {
     background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
   }
-`
+`;

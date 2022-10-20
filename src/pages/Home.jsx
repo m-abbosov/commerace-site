@@ -12,13 +12,12 @@ const Home = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if(location.pathname === "/") {
-            navigate('/product')
+        if (location.pathname === "/") {
+          navigate("/login");
         }
-        API.get("/products")
-            .then(res => {
-                setProducts(res.data)
-            })
+        API.get("/product").then((res) => {
+            setProducts(res.data.data);
+        });
     },[navigate, location])
 
     const addBag = (data) => {
