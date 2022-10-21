@@ -68,7 +68,7 @@ export default function EditProduct({ data }) {
           style={{ position: "absolute", zIndex: 100000, right: 30 }}
           onClose={() => setShow2(false)}
         >
-          Product not added !
+          Product not updated !
         </Alert>
       )}
       {data.photos.length > 1 ? (
