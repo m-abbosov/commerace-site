@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Carousel from "react-bootstrap/Carousel";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Alert from "react-bootstrap/Alert";
+
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import API from "../utils/API";
@@ -11,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 export default function EditProduct({ data }) {
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
+  const [show2, setShow2] = useState(false);
+
   const [priceType, setPriceType] = useState("SALE");
 
   const navigate = useNavigate();
@@ -49,11 +53,24 @@ export default function EditProduct({ data }) {
         setShow1(false);
         navigate("/product");
       }
+    }).catch(err => {
+      if (err) {
+        setShow2(true);
+      }
     })
-    console.log(e);
   };
   return (
     <Wrapper to={`/admin/product/${data.id}`} type={data.type}>
+      {show2 && (
+        <Alert
+          variant={"danger"}
+          dismissible
+          style={{ position: "absolute", zIndex: 100000, right: 30 }}
+          onClose={() => setShow2(false)}
+        >
+          Product not added !
+        </Alert>
+      )}
       {data.photos.length > 1 ? (
         <Carousel>
           {data.photos.map((item, index) => {

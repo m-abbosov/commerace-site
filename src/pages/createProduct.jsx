@@ -3,14 +3,16 @@ import styled from "styled-components";
 import Form from "react-bootstrap/Form";
 import API from "../utils/API";
 import { useState } from "react";
+import Alert from "react-bootstrap/Alert";
 
 export default function CreateProduct() {
   const navigate = useNavigate();
   const [priceType, setPriceType] = useState("SALE");
+  const [show, setShow] = useState(true);
 
   const formClick = (e) => {
     e.preventDefault();
-    let formData = new FormData()
+    let formData = new FormData();
 
     formData.append("name", e.target[0].value);
     formData.append("description", e.target[1].value);
@@ -20,7 +22,7 @@ export default function CreateProduct() {
       {
         type: priceType,
         price: e.target[4].value,
-      }
+      },
     ]);
 
     formData.append("categoryId", 1);
@@ -33,11 +35,25 @@ export default function CreateProduct() {
       if (res) {
         navigate("/admin");
       }
-    });
+    }).catch((err) => {
+      if (err) {
+        setShow(true)
+      }
+     });
   };
 
   return (
     <Wrapper>
+      {show && (
+        <Alert
+          variant={"danger"}
+          dismissible
+          style={{ position: "absolute", zIndex: 20, right: 30 }}
+          onClose={() => setShow(false)}
+        >
+          Product not added !
+        </Alert>
+      )}
       <Form onSubmit={formClick}>
         <label htmlFor="">Name</label>
         <input type="text" placeholder="Name" />
